@@ -1,0 +1,42 @@
+igor@zenbook:~$ sudo apt update                         
+Ign:1 file:/cdrom resolute InRelease
+Err:2 file:/cdrom resolute Release
+  File not found - /cdrom/dists/resolute/Release (2: No such file or directory)
+Hit:3 https://dl.google.com/linux/chrome-stable/deb stable InRelease
+Get:4 https://packages.microsoft.com/repos/code stable InRelease [3,590 B]                             
+Hit:5 http://security.ubuntu.com/ubuntu resolute-security InRelease                                    
+Hit:6 http://archive.ubuntu.com/ubuntu resolute InRelease
+Hit:7 http://archive.ubuntu.com/ubuntu resolute-updates InRelease
+Error: The repository 'file:/cdrom resolute Release' no longer has a Release file.
+Notice: Updating from such a repository can't be done securely, and is therefore disabled by default.
+Notice: See apt-secure(8) manpage for repository creation and user configuration details.
+Notice: Some sources can be modernized. Run 'apt modernize-sources' to do so.
+igor@zenbook:~$ grep -r cdrom /etc/apt/sources.list /etc/apt/sources.list.d/      
+/etc/apt/sources.list.d/cdrom.sources:URIs: file:///cdrom
+igor@zenbook:~$ cat /etc/apt/sources.list.d/cdrom.sources
+Types: deb
+URIs: file:///cdrom
+Suites: resolute
+Components: restricted main
+Check-Date: no
+Signed-By:
+ -----BEGIN PGP PUBLIC KEY BLOCK-----
+ .
+ mDMEaelsohYJKwYBBAHaRw8BAQdADzWboH++xazYLlWQxYISJNOUuCszsEAe1VYx
+ nLM7jge0N1VidW50dSBJU08gT25lLVRpbWUgU2lnbmluZyBLZXkgPG5vb25lQG5v
+ d2hlcmUuaW52YWxpZD6IkAQTFgoAOBYhBMkhD5X1BsLOt6XOLnY5Ww9wQSNXBQJp
+ 6WyiAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHY5Ww9wQSNX8RoA/27S
+ Kam2m7SKuzIAEspjiEKeYdambKTi98Yug5Y2GYAXAP9QHQnUQ98z6JVbssqonB38
+ byRzy0N6HN/734u/VvmmAQ==
+ =EyCt
+ -----END PGP PUBLIC KEY BLOCK-----
+igor@zenbook:~$ sudo rm /etc/apt/sources.list.d/cdrom.sources
+igor@zenbook:~$ sudo apt update
+Hit:1 https://dl.google.com/linux/chrome-stable/deb stable InRelease                      
+Hit:2 https://packages.microsoft.com/repos/code stable InRelease                          
+Hit:3 http://archive.ubuntu.com/ubuntu resolute InRelease           
+Hit:4 http://security.ubuntu.com/ubuntu resolute-security InRelease
+Hit:5 http://archive.ubuntu.com/ubuntu resolute-updates InRelease
+50 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Notice: Some sources can be modernized. Run 'apt modernize-sources' to do so.
+igor@zenbook:~$ 

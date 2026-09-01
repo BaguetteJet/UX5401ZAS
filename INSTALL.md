@@ -1,7 +1,6 @@
 # Installing Linux
 
-Dual booting Kubuntu 26.04 and Windows 11 on the Asus Zenbook 14X OLED Space Edition (UX5401ZAS).
-
+Guide to dual booting Kubuntu 26.04 and Windows 11 on the Asus Zenbook 14X OLED Space Edition UX5401ZAS.
 ## Goals
 
 - ✅ Dual boot Windows and Linux
@@ -14,9 +13,9 @@ Steps to take before installation.
 
 - Backup important data from Windows
 - Prepare BitLocker Recovery Key
-- Check Secure Boot enabled in BIOS
-- Find spare USB (>16GB)
-- Update BIOS
+- Secure Boot enabled in BIOS
+- Spare USB (>16GB)
+- Updated BIOS [support page](https://www.asus.com/us/supportonly/ux5401zas/helpdesk_bios/)
 
 ## Installation Process
 
@@ -24,9 +23,9 @@ Steps to take before installation.
 
 Download [Kubuntu 26.04](https://cdimage.ubuntu.com/kubuntu/releases/) from official source.
 
-Flash the `.iso` image onto USB using [Ventoy](https://github.com/ventoy/ventoy/releases) or [balenaEtcher](https://etcher.balena.io/) (*select disk format **GPT**, not MBR*)
+Flash the `.iso` image onto USB using either: [Ventoy](https://github.com/ventoy/ventoy/releases) (see [About Secure Boot in UEFI mode](https://ventoy.net/en/doc_secure.html)) or [balenaEtcher](https://etcher.balena.io/).
 
-> ⚠️ USB contents will be wiped during the flashing process!
+Select disk format **GPT**, not MBR
 
 ### STEP 2 - Suspend BitLocker
 
@@ -43,7 +42,6 @@ Check BitLocker status:
 ```powershell
 manage-bde -status
 ```
-
 
 ```
 Percentage encrypted: 100%
@@ -67,9 +65,9 @@ Right click on `(C:)` partition and select *Shrink Volume*. Shrink by your desir
 After completion, you should see a grey *Unallocated* partition.
 
 ```
-             | OS (C:)              |             |              |              | 
-260 MB       | 752 GB NTFS (BitLock | 200 GB      | 979 MB       | 200 MB       |  
-Healtyh (EFI | Healthy (Boot, Page  | Unallocated | Healthy (Rec | Healthy (Rec |
+             | OS (C:)                |             |              |              | 
+260 MB       | 752 GB NTFS (BitLocker | 200 GB      | 979 MB       | 200 MB       |  
+Healtyh (EFI | Healthy (Boot, Page... | Unallocated | Healthy (Rec | Healthy (Rec |
 ```
 
 ### STEP 4 - Boot Live Environment
@@ -94,7 +92,7 @@ Open **Konsole** and run command:
 test -d /sys/firmware/efi && echo UEFI || echo Legacy
 ```
 
-> 🛑 Output should be `UEFI` and not `Legacy`. I resolved this issue here: [Issue 1](#issue-1---live-environment-legacy-instead-of-uefi)
+> 🛑 Output should be `UEFI` and not `Legacy`. I resolved this issue here: [Issue 1](/ISSUES.md)
 
 Play around with the environment before you continue installation. Check buttons, bluetooth, sound, WiFi, display, etc.
 
@@ -118,11 +116,11 @@ Unallocated       ext4                                            200 GiB
 /dev/nvme0n1p5    FAT32         MYASUS                            200 MiB  
 ```
 
-Click on the **SYSTEM** partition and select Edit. Set mount point to `/boot/efi`. Do not format. Only check the `Boot` flag (I left `bios-grub` unchecked. I didn't have an `esp` flag).
+1. Click on the **SYSTEM** partition and select Edit. Set mount point to `/boot/efi`. Do not format. Only check the `Boot` flag (`bios-grub` unchecked. I didn't have an `esp` flag).
 
-Click on the **Unallocated** partition and select Create. This will be the **BOOT** partiton. Set size to 1000 MiB, format as `ext4` and DO NOT encrypt. Set mount point as `/boot`, call partition **BOOT**, leave all flags unchecked.
+2. Click on the **Unallocated** partition and select Create. This will be the **BOOT** partiton. Set size to 1000 MiB, format as `ext4` and DO NOT encrypt. Set mount point as `/boot`, call partition **BOOT**, leave all flags unchecked.
 
-Click on the **Unallocated** partition and select Create. This will be the root **KUBUNTU** partition. Set size to remaining space, format as `ext4` (NOT LUKS2) and select encrypt. Choose a passphrase for unlocking the partition. Call the partition **KUBUNTU** and leave all flags unchecked.
+3. Click on the **Unallocated** partition and select Create. This will be the root **KUBUNTU** partition. Set size to remaining space, format as `ext4` (NOT LUKS2) and select encrypt. Choose a passphrase for unlocking the partition. Call the partition **KUBUNTU** and leave all flags unchecked.
 
 **SHOULD LOOK LIKE THIS:**
 
@@ -151,8 +149,6 @@ The installaion should progress until fully until the very end, where I got an e
 > ```The bootloader could not be installed. The installation command <pre>grub-install --target=x86_64-efi --efi-directory=boot/efi --bootloader-id=ubuntu --force</pre> returned error code 1.```   
 > X Close
 
-I resolved this issue here: [Issue 2](#issue-2---bootloader-could-not-be-installed)
-
 Complete installtion and unplug USB.
 
 ### STEP 7 - Clean up
@@ -161,14 +157,14 @@ Once your Kubuntu installation is complete. Reboot and press `F2` repeatedly to 
 
 Change boot order.
 
-- Ubuntu
-- Windows 
+1. Ubuntu
+2. Windows 
 
 Exit and reboot. You should see the GRUB menu. Enter Windows Boot Manager to return to Windows.
 
 Run PowerShell/Terminal as administrator.
 
-Resume BitLocker after Kubuntu installation is complete using
+Resume BitLocker after Kubuntu installation is complete
 
 ```powershell
 Resume-BitLocker -MountPoint "C:"
@@ -176,40 +172,8 @@ Resume-BitLocker -MountPoint "C:"
 
 Reboot and begin to enjoy Kubuntu!
 
-## Issues
-
-These are the issues I had during the installation process. For issues after installation, see [ISSUES.md](/ISSUES.md).
-
-### Issue 1 - Live Environment Legacy instead of UEFI
-
-I tried multiple reboots.
-
-Attempt 1 - Used Ventoy MBR following [About Secure Boot in UEFI mode](https://ventoy.net/en/doc_secure.html). USB showed UEFI. Ventoy showed UEFI. Live environment was `Legacy`.
-
-Attempt 2 - Used Ventoy GPT. USB showed UEFI, Ventoy showed UEFI, but live environment was `Legacy`.
-
-Attempt 3 - Used balenaEtcher. USB showed UEFI, Live environment took substantially longer to load, but was still `Legacy`.
-
-Attempt 4 - Loaded into Windows first, then restarted with USB plugged in. Used balenaEtcher. USB showed UEFI, Live environment finally showed `UEFI`.
-
-I am unsure what caused this issue.
-
-### Issue 2 - Bootloader could not be installed
-
-This problem took me a while to fix.
-
-Attempt 1 - */dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **unecrypted** `/`. FAILED. I deleted the */dev/nvme0n1p6* partition to retry.
-
-Attempt 2 - */dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **encrypted** `/`. FAILED. I tried rebooting and noticed the ubuntu boot option was available. It would bring me to a `GRUB>` termianl instead of the GRUB menu. I couldn't find any information on this installation failure online, so I attempted to fix issue with the assitance of LLMs Claude and DeepSeek. I was able to boot into live environment from the USB stick, and confirmed that GRUB was fine, and Kubuntu installed. I was able to enter the root of the Kubuntu partition. After countless hours, I came to the conclusion that GRUB couldn't access `/boot`, which was inside the encrypted patition. I was unable to rebuild brub with the needed modules to access the encrypted partition.
-
-Attempt 3 - */dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **unencrypted** `/`. FAILED. Rebooting would bring me to a `GRUB>` termianl instead of the GRUB menu. I attempted to fix issue with the assitance of LLMs Claude and ChatGPT. Eventually ChatGPT was able to diagnose the problem and provide me with a working solution. I had a working bootable OS but the root partition was not encrypted.
-
-Attempt 4 - */dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **unencrypted** `/boot` 1000 MiB, New partiton */dev/nvme0n1p7* `ext4` **encrypted** `/`. FAILED. I gave chatGPT the terminal logs from the previous attempt and explained the change is setup, with the root partition now encrypted and the boot being separate. Successfully had working bootable encrypted OS
-
-Here are the steps 
-
 ## Versions
 
-- BIOS version 311 [product support](https://www.asus.com/us/supportonly/ux5401zas/helpdesk_bios/)
+- BIOS version 311
 - Kubuntu 26.04.1
 - GRUB version 2.14

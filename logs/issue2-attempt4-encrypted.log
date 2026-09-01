@@ -1,0 +1,554 @@
+kubuntu@kubuntu:~$ test -d /sys/firmware/efi && echo UEFI || echo Legacy
+UEFI
+kubuntu@kubuntu:~$ lsblk -f
+NAME FSTYPE FSVER LABEL                         UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+loop0
+    squash 4.0                                                                            0   100% /rofs
+loop1
+    squash 4.0                                                                            0   100% /snap/bare/5
+loop2
+    squash 4.0                                                                            0   100% /snap/core24/1587
+loop3
+    squash 4.0                                                                            0   100% /snap/firefox/8107
+loop4
+    squash 4.0                                                                            0   100% /snap/gnome-46-2404/153
+loop5
+    squash 4.0                                                                            0   100% /snap/gtk-common-themes/1535
+loop6
+    squash 4.0                                                                            0   100% /snap/gtk-theme-breeze/8
+loop7
+    squash 4.0                                                                            0   100% /snap/icon-theme-breeze/5
+loop8
+    squash 4.0                                                                            0   100% /snap/mesa-2404/1165
+loop9
+    squash 4.0                                                                            0   100% /snap/snapd/26865
+loop10
+    squash 4.0                                                                            0   100% /snap/thunderbird/1057
+sda  iso966 Jolie Kubuntu 26.04 amd64           2026-04-23-01-04-38-00
+├─sda1
+│    iso966 Jolie Kubuntu 26.04 amd64           2026-04-23-01-04-38-00                     0   100% /cdrom
+├─sda2
+│    vfat   FAT12 ESP                           0190-D2E2
+├─sda3
+│
+└─sda4
+    ext4   1.0   writable                      8dcd6016-c07d-44e1-a948-2c6e4e950096    8.8G     2% /var/crash
+                                                                                                   /var/log
+nvme0n1
+│
+├─nvme0n1p1
+│    vfat   FAT32 SYSTEM                        D26A-16A9
+├─nvme0n1p2
+│
+├─nvme0n1p3
+│    BitLoc 2     LAPTOP-NGNJF77M OS 21/09/2023 6b5cd42a-b45a-41b3-b5b0-1948ae4bb647
+├─nvme0n1p4
+│    ntfs                                       E20A6B430A6B1437
+├─nvme0n1p5
+│    vfat   FAT32 MYASUS                        4626-1E0F
+├─nvme0n1p6
+│    ext4   1.0   BOOT                          1940b927-6286-4d14-ab5c-66047577eeaa
+└─nvme0n1p7
+    crypto 2                                   803f2bf9-6b15-4782-b09f-a87b7c6688cd
+kubuntu@kubuntu:~$ findmnt /
+TARGET SOURCE FSTYPE OPTIONS
+/      /cow   overla rw,relatime,lowerdir=/filesystem.squashfs,upperdir=/cow/upper,workdir=/cow/work,uuid=on,x
+kubuntu@kubuntu:~$ findmnt /boot
+kubuntu@kubuntu:~$ findmnt /boot/efi
+kubuntu@kubuntu:~$ sudo cryptsetup status
+Usage: cryptsetup [-?VqrvyN] [-?|--help] [--usage] [-V|--version] [--active-name=STRING]
+       [--align-payload=SECTORS] [--allow-discards] [-q|--batch-mode] [--cancel-deferred]
+       [-c|--cipher=STRING] [--debug] [--debug-json] [--decrypt] [--deferred] [--device-size=bytes]
+       [--disable-blkid] [--disable-external-tokens] [--disable-keyring] [--disable-locks]
+       [--disable-veracrypt] [--dump-json-metadata] [--dump-volume-key] [--encrypt]
+       [--external-tokens-path=STRING] [--force-password] [--force-offline-reencrypt]
+       [--force-no-keyslots] [-h|--hash=STRING] [--header=STRING] [--header-backup-file=STRING]
+       [--hotzone-size=bytes] [--hw-opal] [--hw-opal-factory-reset] [--hw-opal-only] [--init-only]
+       [-I|--integrity=STRING] [--integrity-inline] [--integrity-key-size=BITS]
+       [--integrity-legacy-padding] [--integrity-no-journal] [--integrity-no-wipe] [-i|--iter-time=msecs]
+       [--iv-large-sectors] [--json-file=STRING] [--keep-key] [--key-description=STRING]
+       [-d|--key-file=STRING] [-s|--key-size=BITS] [-S|--key-slot=INT] [--keyfile-offset=bytes]
+       [-l|--keyfile-size=bytes] [--keyslot-cipher=STRING] [--keyslot-key-size=BITS] [--label=STRING]
+       [--link-vk-to-keyring=STRING] [--luks2-keyslots-size=bytes] [--luks2-metadata-size=bytes]
+       [--new-keyfile=STRING] [--new-keyfile-offset=bytes] [--new-keyfile-size=bytes]
+       [--new-key-description=STRING] [--new-key-size=BITS] [--new-key-slot=INT] [--new-token-id=INT]
+       [--new-volume-key-file=STRING] [--new-volume-key-keyring=STRING] [-o|--offset=SECTORS]
+       [--pbkdf=STRING] [--pbkdf-force-iterations=LONG] [--pbkdf-memory=kilobytes]
+       [--pbkdf-parallel=threads] [--perf-high_priority] [--perf-no_read_workqueue]
+       [--perf-no_write_workqueue] [--perf-same_cpu_crypt] [--perf-submit_from_crypt_cpus] [--persistent]
+       [--priority=STRING] [--progress-json] [--progress-frequency=secs] [-r|--readonly]
+       [--reduce-device-size=bytes] [--refresh] [--resilience=STRING] [--resilience-hash=STRING]
+       [--resume-only] [--sector-size=INT] [--serialize-memory-hard-pbkdf] [--shared]
+       [-b|--size=SECTORS] [-p|--skip=SECTORS] [--subsystem=STRING] [--test-args] [--test-passphrase]
+       [-t|--timeout=secs] [--token-id=INT] [--token-only] [--token-replace] [--token-type=STRING]
+       [--tcrypt-backup] [--tcrypt-hidden] [--tcrypt-system] [-T|--tries=INT] [-M|--type=STRING]
+       [--unbound] [--use-random] [--use-urandom] [--uuid=STRING] [--veracrypt] [--veracrypt-pim=INT]
+       [--veracrypt-query-pim] [-v|--verbose] [-y|--verify-passphrase] [--volume-key-file=STRING]
+       [--volume-key-keyring=STRING] [-B|--block-size=MiB] [-N|--new] [--use-directio] [--use-fsync]
+       [--write-log] [--dump-master-key] [--master-key-file=STRING]
+       [OPTION...] <action> <action-specific>
+cryptsetup: status: requires <name> as arguments
+kubuntu@kubuntu:~$ sudo cryptsetup luksDump /dev/nvme0n1p7 | head -20
+LUKS header information
+Version:        2
+Epoch:          3
+Metadata area:  16384 [bytes]
+Keyslots area:  16744448 [bytes]
+UUID:           803f2bf9-6b15-4782-b09f-a87b7c6688cd
+Label:          (no label)
+Subsystem:      (no subsystem)
+Flags:          (no flags)
+
+Data segments:
+ 0: crypt
+       offset: 16777216 [bytes]
+       length: (whole device)
+       cipher: aes-xts-plain64
+       sector: 512 [bytes]
+
+Keyslots:
+ 0: luks2
+       Key:        512 bits
+kubuntu@kubuntu:~$ sudo efibootmgr -v
+BootCurrent: 0006
+Timeout: 1 seconds
+BootOrder: 0005,0003,0006
+Boot0003* Windows Boot Manager  HD(1,GPT,5956c90f-6591-45b7-8648-74ed908a8b52,0x800,0x82000)/\EFI\MICROSOFT\BOOT\BOOTMGFW.EFI57494e444f5753000100000088000000780000004200430044004f0042004a004500430054003d007b
+00390064006500610038003600320063002d0035006300640064002d0034006500370030002d0061006300630031002d006600330032006200330034003400640034003700390035007d00000000000100000010000000040000007fff0400
+     dp: 04 01 2a 00 01 00 00 00 00 08 00 00 00 00 00 00 00 20 08 00 00 00 00 00 0f c9 56 59 91 65 b7 45 86 48 74 ed 90 8a 8b 52 02 02 / 04 04 46 00 5c 00 45 00 46 00 49 00 5c 00 4d 00 49 00 43 00 52 00 4f
+00 53 00 4f 00 46 00 54 00 5c 00 42 00 4f 00 4f 00 54 00 5c 00 42 00 4f 00 4f 00 54 00 4d 00 47 00 46 00 57 00 2e 00 45 00 46 00 49 00 00 00 / 7f ff 04 00
+   data: 57 49 4e 44 4f 57 53 00 01 00 00 00 88 00 00 00 78 00 00 00 42 00 43 00 44 00 4f 00 42 00 4a 00 45 00 43 00 54 00 3d 00 7b 00 39 00 64 00 65 00 61 00 38 00 36 00 32 00 63 00 2d 00 35 00 63 00 64 00
+64 00 2d 00 34 00 65 00 37 00 30 00 2d 00 61 00 63 00 63 00 31 00 2d 00 66 00 33 00 32 00 62 00 33 00 34 00 34 00 64 00 34 00 37 00 39 00 35 00 7d 00 00 00 00 00 01 00 00 00 10 00 00 00 04 00 00 00 7f ff 04
+00
+Boot0005* ubuntu        HD(1,GPT,5956c90f-6591-45b7-8648-74ed908a8b52,0x800,0x82000)/\EFI\ubuntu\shimx64.efi0000424f
+     dp: 04 01 2a 00 01 00 00 00 00 08 00 00 00 00 00 00 00 20 08 00 00 00 00 00 0f c9 56 59 91 65 b7 45 86 48 74 ed 90 8a 8b 52 02 02 / 04 04 34 00 5c 00 45 00 46 00 49 00 5c 00 75 00 62 00 75 00 6e 00 74
+00 75 00 5c 00 73 00 68 00 69 00 6d 00 78 00 36 00 34 00 2e 00 65 00 66 00 69 00 00 00 / 7f ff 04 00
+   data: 00 00 42 4f
+Boot0006* UEFI: Intenso Business Line 8.07, Partition 2 PciRoot(0x0)/Pci(0x14,0x0)/USB(3,0)/HD(2,GPT,c6acf484-c9b0-415b-91d9-9402cbea775e,0x96e56c,0x2838)0000424f
+     dp: 02 01 0c 00 d0 41 03 0a 00 00 00 00 / 01 01 06 00 00 14 / 03 05 06 00 03 00 / 04 01 2a 00 02 00 00 00 6c e5 96 00 00 00 00 00 38 28 00 00 00 00 00 00 84 f4 ac c6 b0 c9 5b 41 91 d9 94 02 cb ea 77 5e
+02 02 / 7f ff 04 00
+   data: 00 00 42 4f
+kubuntu@kubuntu:~$ sudo ls -lah /boot/grub/
+total 2.4M
+drwxr-xr-x 2 root root   58 Apr 23 01:47 .
+drwxr-xr-x 3 root root  267 Apr 23 01:49 ..
+-rw-r--r-- 1 root root  712 Apr 23 01:47 gfxblacklist.txt
+-rw-r--r-- 1 root root 2.4M Apr 23 01:47 unicode.pf2
+kubuntu@kubuntu:~$ sudo grep -E "menuentry|Windows|Kubuntu|Ubuntu" /boot/grub/grub.cfg
+grep: /boot/grub/grub.cfg: No such file or directory
+kubuntu@kubuntu:~$ sudo cryptsetup luksOpen /dev/nvme0n1p7 cryptroot
+Enter passphrase for /dev/nvme0n1p7:
+No key available with this passphrase.
+Enter passphrase for /dev/nvme0n1p7:
+kubuntu@kubuntu:~$ lsblk -f
+NAME FSTYPE FSVER LABEL                         UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+loop0
+    squash 4.0                                                                            0   100% /rofs
+loop1
+    squash 4.0                                                                            0   100% /snap/bare/5
+loop2
+    squash 4.0                                                                            0   100% /snap/core24/1587
+loop3
+    squash 4.0                                                                            0   100% /snap/firefox/8107
+loop4
+    squash 4.0                                                                            0   100% /snap/gnome-46-2404/153
+loop5
+    squash 4.0                                                                            0   100% /snap/gtk-common-themes/1535
+loop6
+    squash 4.0                                                                            0   100% /snap/gtk-theme-breeze/8
+loop7
+    squash 4.0                                                                            0   100% /snap/icon-theme-breeze/5
+loop8
+    squash 4.0                                                                            0   100% /snap/mesa-2404/1165
+loop9
+    squash 4.0                                                                            0   100% /snap/snapd/26865
+loop10
+    squash 4.0                                                                            0   100% /snap/thunderbird/1057
+sda  iso966 Jolie Kubuntu 26.04 amd64           2026-04-23-01-04-38-00
+├─sda1
+│    iso966 Jolie Kubuntu 26.04 amd64           2026-04-23-01-04-38-00                     0   100% /cdrom
+├─sda2
+│    vfat   FAT12 ESP                           0190-D2E2
+├─sda3
+│
+└─sda4
+    ext4   1.0   writable                      8dcd6016-c07d-44e1-a948-2c6e4e950096    8.8G     2% /var/crash
+                                                                                                   /var/log
+nvme0n1
+│
+├─nvme0n1p1
+│    vfat   FAT32 SYSTEM                        D26A-16A9
+├─nvme0n1p2
+│
+├─nvme0n1p3
+│    BitLoc 2     LAPTOP-NGNJF77M OS 21/09/2023 6b5cd42a-b45a-41b3-b5b0-1948ae4bb647
+├─nvme0n1p4
+│    ntfs                                       E20A6B430A6B1437
+├─nvme0n1p5
+│    vfat   FAT32 MYASUS                        4626-1E0F
+├─nvme0n1p6
+│    ext4   1.0   BOOT                          1940b927-6286-4d14-ab5c-66047577eeaa
+└─nvme0n1p7
+ │  crypto 2                                   803f2bf9-6b15-4782-b09f-a87b7c6688cd
+ └─cryptroot
+    ext4   1.0                                 22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9
+kubuntu@kubuntu:~$ sudo mount /dev/mapper/cryptroot /mnt
+kubuntu@kubuntu:~$ sudo mount /dev/nvme0n1p6 /mnt/boot
+kubuntu@kubuntu:~$ sudo mount /dev/nvme0n1p1 /mnt/boot/efi
+kubuntu@kubuntu:~$ findmnt /mnt
+TARGET SOURCE                FSTYPE OPTIONS
+/mnt   /dev/mapper/cryptroot ext4   rw,relatime
+kubuntu@kubuntu:~$ findmnt /mnt/boot
+TARGET    SOURCE         FSTYPE OPTIONS
+/mnt/boot /dev/nvme0n1p6 ext4   rw,relatime
+kubuntu@kubuntu:~$ findmnt /mnt/boot/efi
+TARGET   SOURCE      FSTYPE OPTIONS
+/mnt/boot/efi
+        /dev/nvme0n1p1
+                    vfat   rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed
+kubuntu@kubuntu:~$ sudo ls -lah /mnt/boot/grub/
+total 2.4M
+drwxr-xr-x 5 root root 4.0K Aug 29 19:12 .
+drwxr-xr-x 5 root root 4.0K Aug 29 19:11 ..
+drwxr-xr-x 2 root root 4.0K Aug 29 19:12 fonts
+-rw-r--r-- 1 root root  712 Apr 23 01:47 gfxblacklist.txt
+-rw-r--r-- 1 root root 1.0K Aug 29 19:12 grubenv
+drwxr-xr-x 2 root root 4.0K Aug 29 19:12 locale
+-rw-r--r-- 1 root root 2.4M Apr 23 01:47 unicode.pf2
+drwxr-xr-x 2 root root  12K Aug 29 19:12 x86_64-efi
+kubuntu@kubuntu:~$ sudo grep -E "menuentry|Windows|Kubuntu|Ubuntu" /mnt/boot/grub/grub.cfg
+grep: /mnt/boot/grub/grub.cfg: No such file or directory
+kubuntu@kubuntu:~$ sudo cat /mnt/etc/fstab
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# <file system>             <mount point>  <type>  <options>  <dump>  <pass>
+UUID=D26A-16A9                            /boot/efi      vfat    defaults   0 2
+UUID=1940b927-6286-4d14-ab5c-66047577eeaa /boot          ext4    defaults   0 2
+/dev/mapper/luks-803f2bf9-6b15-4782-b09f-a87b7c6688cd /              ext4    defaults   0 1
+/swapfile                                 swap           swap    defaults   0 0
+tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0
+kubuntu@kubuntu:~$ sudo cat /mnt/etc/crypttab
+# /etc/crypttab: mappings for encrypted partitions.
+#
+# Each mapped device will be created in /dev/mapper, so your /etc/fstab
+# should use the /dev/mapper/<name> paths for encrypted devices.
+#
+# See crypttab(5) for the supported syntax.
+#
+# NOTE: You need not list your root (/) partition here, but it must be set up
+#       beforehand by the initramfs (/etc/mkinitcpio.conf). The same applies
+#       to encrypted swap, which should be set up with mkinitcpio-openswap
+#       for resume support.
+#
+# <name>               <device>                         <password> <options>
+luks-803f2bf9-6b15-4782-b09f-a87b7c6688cd UUID=803f2bf9-6b15-4782-b09f-a87b7c6688cd     none
+kubuntu@kubuntu:~$ sudo ls -lah /mnt/boot/
+total 118M
+drwxr-xr-x  5 root root 4.0K Aug 29 19:11 .
+drwxr-xr-x 20 root root 4.0K Aug 29 19:11 ..
+-rw-------  1 root root  11M Apr 13 09:12 System.map-7.0.0-14-generic
+-rw-r--r--  1 root root 302K Apr 13 09:12 config-7.0.0-14-generic
+drwxr-xr-x  4 root root 4.0K Jan  1  1970 efi
+drwxr-xr-x  5 root root 4.0K Aug 29 19:12 grub
+lrwxrwxrwx  1 root root   27 Apr 23 01:48 initrd.img -> initrd.img-7.0.0-14-generic
+-rw-------  1 root root  90M Aug 29 19:11 initrd.img-7.0.0-14-generic
+lrwxrwxrwx  1 root root   27 Apr 23 01:48 initrd.img.old -> initrd.img-7.0.0-14-generic
+drwx------  2 root root  16K Aug 29 19:05 lost+found
+-rw-r--r--  1 root root 153K Nov 29  2025 mt86+ia32
+-rw-r--r--  1 root root 158K Nov 29  2025 mt86+x64
+lrwxrwxrwx  1 root root   24 Apr 23 01:48 vmlinuz -> vmlinuz-7.0.0-14-generic
+-rw-------  1 root root  17M Aug 29 19:11 vmlinuz-7.0.0-14-generic
+lrwxrwxrwx  1 root root   24 Apr 23 01:48 vmlinuz.old -> vmlinuz-7.0.0-14-generic
+kubuntu@kubuntu:~$ sudo mount --bind /dev /mnt/dev
+kubuntu@kubuntu:~$ sudo mount --bind /dev/pts /mnt/dev/pts
+kubuntu@kubuntu:~$ sudo mount --bind /proc /mnt/proc
+kubuntu@kubuntu:~$ sudo mount --bind /sys /mnt/sys
+kubuntu@kubuntu:~$ sudo mount --bind /run /mnt/run
+kubuntu@kubuntu:~$ sudo chroot /mnt /bin/bash
+root@kubuntu:/# findmnt /boot
+TARGET SOURCE         FSTYPE OPTIONS
+/boot  /dev/nvme0n1p6 ext4   rw,relatime
+root@kubuntu:/# findmnt /boot/efi
+TARGET SOURCE     FSTYPE OPTIONS
+/boot/efi
+      /dev/nvme0n1p1
+                 vfat   rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,er
+root@kubuntu:/# ls -lah /boot/grub/
+total 2.4M
+drwxr-xr-x 5 root root 4.0K Aug 29 19:12 .
+drwxr-xr-x 5 root root 4.0K Aug 29 19:11 ..
+drwxr-xr-x 2 root root 4.0K Aug 29 19:12 fonts
+-rw-r--r-- 1 root root  712 Apr 23 01:47 gfxblacklist.txt
+-rw-r--r-- 1 root root 1.0K Aug 29 19:12 grubenv
+drwxr-xr-x 2 root root 4.0K Aug 29 19:12 locale
+-rw-r--r-- 1 root root 2.4M Apr 23 01:47 unicode.pf2
+drwxr-xr-x 2 root root  12K Aug 29 19:12 x86_64-efi
+root@kubuntu:/# ls -lah /boot/efi/EFI/ubuntu/
+total 4.5M
+drwxr-xr-x 2 root root 4.0K Aug 28 19:20 .
+drwxr-xr-x 5 root root 4.0K Aug 28 19:20 ..
+-rwxr-xr-x 1 root root  112 Aug 29 19:12 BOOTX64.CSV
+-rwxr-xr-x 1 root root  112 Aug 29 19:12 grub.cfg
+-rwxr-xr-x 1 root root 2.7M Aug 29 19:12 grubx64.efi
+-rwxr-xr-x 1 root root 837K Aug 29 19:12 mmx64.efi
+-rwxr-xr-x 1 root root 945K Aug 29 19:12 shimx64.efi
+root@kubuntu:/# grub-mkconfig -o /boot/grub/grub.cfg
+Sourcing file `/etc/default/grub'
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-7.0.0-14-generic
+Found initrd image: /boot/initrd.img-7.0.0-14-generic
+Found memtest86+ 64bit EFI image: /boot/mt86+x64
+Found memtest86+ 32bit EFI image: /boot/mt86+ia32
+Found memtest86+ 64bit image: /boot/mt86+x64
+Found memtest86+ 32bit image: /boot/mt86+ia32
+Warning: os-prober will be executed to detect other bootable partitions.
+Its output will be used to detect bootable binaries on them and create new boot entries.
+Found Windows Boot Manager on /dev/nvme0n1p1@/EFI/Microsoft/Boot/bootmgfw.efi
+Adding boot menu entry for UEFI Firmware Settings ...
+done
+root@kubuntu:/# ls -lh /boot/grub/grub.cfg
+-rw------- 1 root root 9.7K Aug 29 20:52 /boot/grub/grub.cfg
+root@kubuntu:/# grep -E "menuentry|Windows|Kubuntu|Linux" /boot/grub/grub.cfg
+if [ x"${feature_menuentry_id}" = xy ]; then
+ menuentry_id_option="--id"
+ menuentry_id_option=""
+export menuentry_id_option
+menuentry 'Kubuntu GNU/Linux' --class kubuntu --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9' {
+submenu 'Advanced options for Kubuntu GNU/Linux' $menuentry_id_option 'gnulinux-advanced-22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9' {
+       menuentry 'Kubuntu GNU/Linux, with Linux 7.0.0-14-generic' --class kubuntu --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-7.0.0-14-generic-advanced-22ee2ba5-97c0-4eb9-9aa1-31
+196dfb3be9' {
+               echo    'Loading Linux 7.0.0-14-generic ...'
+       menuentry 'Kubuntu GNU/Linux, with Linux 7.0.0-14-generic (recovery mode)' --class kubuntu --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-7.0.0-14-generic-recovery-22ee2ba5-9
+7c0-4eb9-9aa1-31196dfb3be9' {
+               echo    'Loading Linux 7.0.0-14-generic ...'
+       menuentry "Memory test (mt86+x64)" --class memtest $menuentry_id_option "memtest86+" {
+       menuentry "Memory test (mt86+x64, serial console)" --class memtest $menuentry_id_option "memtest86+-serial" {
+       menuentry "Memory test (mt86+ia32)" --class memtest $menuentry_id_option "memtest86+" {
+       menuentry "Memory test (mt86+ia32, serial console)" --class memtest $menuentry_id_option "memtest86+-serial" {
+       menuentry "Memory test (mt86+x64)" --class memtest $menuentry_id_option "memtest86+" {
+       menuentry "Memory test (mt86+x64, serial console)" --class memtest $menuentry_id_option "memtest86+-serial" {
+       menuentry "Memory test (mt86+ia32)" --class memtest $menuentry_id_option "memtest86+" {
+       menuentry "Memory test (mt86+ia32, serial console)" --class memtest $menuentry_id_option "memtest86+-serial" {
+menuentry 'Windows Boot Manager (on /dev/nvme0n1p1)' --class windows --class os $menuentry_id_option 'osprober-efi-D26A-16A9' {
+               menuentry 'UEFI Firmware Settings' $menuentry_id_option 'uefi-firmware' {
+root@kubuntu:/# grep -nE "cryptomount|cryptdevice|root=UUID" /boot/grub/grub.cfg
+178:    linux   /vmlinuz-7.0.0-14-generic root=UUID=22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9 ro  quiet cryptdevice=UUID=803f2bf9-6b15-4782-b09f-a87b7c6688cd:luks-803f2bf9-6b15-4782-b09f-a87b7c6688cd root=/dev/ma
+pper/luks-803f2bf9-6b15-4782-b09f-a87b7c6688cd splash
+192:            linux   /vmlinuz-7.0.0-14-generic root=UUID=22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9 ro  quiet cryptdevice=UUID=803f2bf9-6b15-4782-b09f-a87b7c6688cd:luks-803f2bf9-6b15-4782-b09f-a87b7c6688cd root
+=/dev/mapper/luks-803f2bf9-6b15-4782-b09f-a87b7c6688cd splash
+205:            linux   /vmlinuz-7.0.0-14-generic root=UUID=22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9 ro recovery nomodeset dis_ucode_ldr
+root@kubuntu:/# update-initramfs -c -k 7.0.0-14-generic
+update-initramfs: Generating /boot/initrd.img-7.0.0-14-generic
+cryptsetup: WARNING: target 'cryptroot' not found in /etc/crypttab
+W: Couldn't identify type of root file system '/dev/mapper/luks-803f2bf9-6b15-4782-b09f-a87b7c6688cd' for fsck hook
+root@kubuntu:/# nano /etc/crypttab
+root@kubuntu:/# nano /etc/crypttab
+root@kubuntu:/# update-initramfs -u -k 7.0.0-14-generic
+update-initramfs: Generating /boot/initrd.img-7.0.0-14-generic
+cryptsetup: WARNING: target 'cryptroot' not found in /etc/crypttab
+W: Couldn't identify type of root file system '/dev/mapper/luks-803f2bf9-6b15-4782-b09f-a87b7c6688cd' for fsck hook
+root@kubuntu:/# grep -Rni "cryptroot" /etc/default/grub /etc/crypttab /etc/initramfs-tools /etc/default 2>/dev/null
+root@kubuntu:/# cat /etc/default/grub
+# If you change this file or any /etc/default/grub.d/*.cfg file,
+# run 'update-grub' afterwards to update /boot/grub/grub.cfg.
+# For full documentation of the options in these files, see:
+#   info -f grub -n 'Simple configuration'
+
+GRUB_DEFAULT=0
+GRUB_TIMEOUT_STYLE=hidden
+GRUB_TIMEOUT=0
+GRUB_DISTRIBUTOR='Kubuntu'
+GRUB_CMDLINE_LINUX_DEFAULT='quiet cryptdevice=UUID=803f2bf9-6b15-4782-b09f-a87b7c6688cd:luks-803f2bf9-6b15-4782-b09f-a87b7c6688cd root=/dev/mapper/luks-803f2bf9-6b15-4782-b09f-a87b7c6688cd splash'
+GRUB_CMDLINE_LINUX=""
+
+# If your computer has multiple operating systems installed, then you
+# probably want to run os-prober. However, if your computer is a host
+# for guest OSes installed via LVM or raw disk devices, running
+# os-prober can cause damage to those guest OSes as it mounts
+# filesystems to look for things.
+#GRUB_DISABLE_OS_PROBER=false
+
+# Uncomment to enable BadRAM filtering, modify to suit your needs
+# This works with Linux (no patch required) and with any kernel that obtains
+# the memory map information from GRUB (GNU Mach, kernel of FreeBSD ...)
+#GRUB_BADRAM="0x01234567,0xfefefefe,0x89abcdef,0xefefefef"
+
+# Uncomment to disable graphical terminal
+#GRUB_TERMINAL=console
+
+# The resolution used on graphical terminal
+# note that you can use only modes which your graphic card supports via VBE/GOP/UGA
+# you can see them in real GRUB with the command `videoinfo'
+#GRUB_GFXMODE=640x480
+
+# Uncomment if you don't want GRUB to pass "root=UUID=xxx" parameter to Linux
+#GRUB_DISABLE_LINUX_UUID=true
+
+# Uncomment to disable generation of recovery mode menu entries
+#GRUB_DISABLE_RECOVERY="true"
+
+# Uncomment to get a beep at grub start
+#GRUB_INIT_TUNE="480 440 1"
+root@kubuntu:/# cat /etc/initramfs-tools/conf.d/cryptroot 2>/dev/null || echo "no cryptroot conf file"
+no cryptroot conf file
+root@kubuntu:/# nano /etc/default/grub
+root@kubuntu:/# cat /etc/crypttab
+# /etc/crypttab: mappings for encrypted partitions.
+#
+# Each mapped device will be created in /dev/mapper, so your /etc/fstab
+# should use the /dev/mapper/<name> paths for encrypted devices.
+#
+# See crypttab(5) for the supported syntax.
+#
+# NOTE: You need not list your root (/) partition here, but it must be set up
+#       beforehand by the initramfs (/etc/mkinitcpio.conf). The same applies
+#       to encrypted swap, which should be set up with mkinitcpio-openswap
+#       for resume support.
+#
+# <name>               <device>                         <password> <options>
+luks-803f2bf9-6b15-4782-b09f-a87b7c6688cd UUID=803f2bf9-6b15-4782-b09f-a87b7c6688cd none luks,discard
+root@kubuntu:/# grub-mkconfig -o /boot/grub/grub.cfg
+Sourcing file `/etc/default/grub'
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-7.0.0-14-generic
+Found initrd image: /boot/initrd.img-7.0.0-14-generic
+Found memtest86+ 64bit EFI image: /boot/mt86+x64
+Found memtest86+ 32bit EFI image: /boot/mt86+ia32
+Found memtest86+ 64bit image: /boot/mt86+x64
+Found memtest86+ 32bit image: /boot/mt86+ia32
+Warning: os-prober will be executed to detect other bootable partitions.
+Its output will be used to detect bootable binaries on them and create new boot entries.
+Found Windows Boot Manager on /dev/nvme0n1p1@/EFI/Microsoft/Boot/bootmgfw.efi
+Adding boot menu entry for UEFI Firmware Settings ...
+done
+root@kubuntu:/# update-initramfs -u -k 7.0.0-14-generic
+update-initramfs: Generating /boot/initrd.img-7.0.0-14-generic
+cryptsetup: WARNING: target 'cryptroot' not found in /etc/crypttab
+W: Couldn't identify type of root file system '/dev/mapper/luks-803f2bf9-6b15-4782-b09f-a87b7c6688cd' for fsck hook
+root@kubuntu:/# nano /etc/crypttab
+root@kubuntu:/# nano /etc/fstab
+root@kubuntu:/# cat /etc/crypttab
+# /etc/crypttab: mappings for encrypted partitions.
+#
+# Each mapped device will be created in /dev/mapper, so your /etc/fstab
+# should use the /dev/mapper/<name> paths for encrypted devices.
+#
+# See crypttab(5) for the supported syntax.
+#
+# NOTE: You need not list your root (/) partition here, but it must be set up
+#       beforehand by the initramfs (/etc/mkinitcpio.conf). The same applies
+#       to encrypted swap, which should be set up with mkinitcpio-openswap
+#       for resume support.
+#
+# <name>               <device>                         <password> <options>
+cryptroot UUID=803f2bf9-6b15-4782-b09f-a87b7c6688cd none luks,discard
+root@kubuntu:/# grep -v '^#' /etc/fstab
+UUID=D26A-16A9                            /boot/efi      vfat    defaults   0 2
+UUID=1940b927-6286-4d14-ab5c-66047577eeaa /boot          ext4    defaults   0 2
+/dev/mapper/cryptroot                     /              ext4    defaults   0 1
+/swapfile                                 swap           swap    defaults   0 0
+tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0
+root@kubuntu:/# update-initramfs -u -k 7.0.0-14-generic
+update-initramfs: Generating /boot/initrd.img-7.0.0-14-generic
+root@kubuntu:/# grub-mkconfig -o /boot/grub/grub.cfg
+Sourcing file `/etc/default/grub'
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-7.0.0-14-generic
+Found initrd image: /boot/initrd.img-7.0.0-14-generic
+Found memtest86+ 64bit EFI image: /boot/mt86+x64
+Found memtest86+ 32bit EFI image: /boot/mt86+ia32
+Found memtest86+ 64bit image: /boot/mt86+x64
+Found memtest86+ 32bit image: /boot/mt86+ia32
+Warning: os-prober will be executed to detect other bootable partitions.
+Its output will be used to detect bootable binaries on them and create new boot entries.
+Found Windows Boot Manager on /dev/nvme0n1p1@/EFI/Microsoft/Boot/bootmgfw.efi
+Adding boot menu entry for UEFI Firmware Settings ...
+done
+root@kubuntu:/# grep -nE "cryptdevice|root=/dev/mapper|root=UUID" /boot/grub/grub.cfg
+178:    linux   /vmlinuz-7.0.0-14-generic root=UUID=22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9 ro  quiet splash
+192:            linux   /vmlinuz-7.0.0-14-generic root=UUID=22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9 ro  quiet splash
+205:            linux   /vmlinuz-7.0.0-14-generic root=UUID=22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9 ro recovery nomodeset dis_ucode_ldr
+root@kubuntu:/# grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=ubuntu --recheck
+Installing for x86_64-efi platform.
+grub-install: warning: EFI variables cannot be set on this system.
+grub-install: warning: You will have to complete the GRUB setup manually.
+Installation finished. No error reported.
+root@kubuntu:/# ls -lh /boot/efi/EFI/ubuntu/
+total 4.5M
+-rwxr-xr-x 1 root root  112 Aug 29 21:12 BOOTX64.CSV
+-rwxr-xr-x 1 root root  112 Aug 29 21:12 grub.cfg
+-rwxr-xr-x 1 root root 2.7M Aug 29 21:12 grubx64.efi
+-rwxr-xr-x 1 root root 837K Aug 29 21:12 mmx64.efi
+-rwxr-xr-x 1 root root 945K Aug 29 21:12 shimx64.efi
+root@kubuntu:/# grep -nE "menuentry.*(Kubuntu|Windows)|root=UUID" /boot/grub/grub.cfg
+169:menuentry 'Kubuntu GNU/Linux' --class kubuntu --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9' {
+178:    linux   /vmlinuz-7.0.0-14-generic root=UUID=22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9 ro  quiet splash
+182:    menuentry 'Kubuntu GNU/Linux, with Linux 7.0.0-14-generic' --class kubuntu --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-7.0.0-14-generic-advanced-22ee2ba5-97c0-4eb9-9aa1-31
+196dfb3be9' {
+192:            linux   /vmlinuz-7.0.0-14-generic root=UUID=22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9 ro  quiet splash
+196:    menuentry 'Kubuntu GNU/Linux, with Linux 7.0.0-14-generic (recovery mode)' --class kubuntu --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-7.0.0-14-generic-recovery-22ee2ba5-9
+7c0-4eb9-9aa1-31196dfb3be9' {
+205:            linux   /vmlinuz-7.0.0-14-generic root=UUID=22ee2ba5-97c0-4eb9-9aa1-31196dfb3be9 ro recovery nomodeset dis_ucode_ldr
+282:menuentry 'Windows Boot Manager (on /dev/nvme0n1p1)' --class windows --class os $menuentry_id_option 'osprober-efi-D26A-16A9' {
+root@kubuntu:/# cat /etc/crypttab
+cat /etc/fstab
+ls -lh /boot/initrd.img-7.0.0-14-generic
+sudo blkid /dev/nvme0n1p1 /dev/nvme0n1p6 /dev/nvme0n1p7
+# /etc/crypttab: mappings for encrypted partitions.
+#
+# Each mapped device will be created in /dev/mapper, so your /etc/fstab
+# should use the /dev/mapper/<name> paths for encrypted devices.
+#
+# See crypttab(5) for the supported syntax.
+#
+# NOTE: You need not list your root (/) partition here, but it must be set up
+#       beforehand by the initramfs (/etc/mkinitcpio.conf). The same applies
+#       to encrypted swap, which should be set up with mkinitcpio-openswap
+#       for resume support.
+#
+# <name>               <device>                         <password> <options>
+cryptroot UUID=803f2bf9-6b15-4782-b09f-a87b7c6688cd none luks,discard
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# <file system>             <mount point>  <type>  <options>  <dump>  <pass>
+UUID=D26A-16A9                            /boot/efi      vfat    defaults   0 2
+UUID=1940b927-6286-4d14-ab5c-66047577eeaa /boot          ext4    defaults   0 2
+/dev/mapper/cryptroot                     /              ext4    defaults   0 1
+/swapfile                                 swap           swap    defaults   0 0
+tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0
+-rw------- 1 root root 90M Aug 29 21:07 /boot/initrd.img-7.0.0-14-generic
+/dev/nvme0n1p1: LABEL_FATBOOT="SYSTEM" LABEL="SYSTEM" UUID="D26A-16A9" BLOCK_SIZE="512" TYPE="vfat" PARTLABEL="EFI system partition" PARTUUID="5956c90f-6591-45b7-8648-74ed908a8b52"
+/dev/nvme0n1p6: LABEL="BOOT" UUID="1940b927-6286-4d14-ab5c-66047577eeaa" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="a4773c51-bcbe-40e3-82a7-bcce1a45806f"
+/dev/nvme0n1p7: UUID="803f2bf9-6b15-4782-b09f-a87b7c6688cd" TYPE="crypto_LUKS" PARTUUID="9205ad7c-f3df-4be7-831f-f13ff1ba54d7"
+root@kubuntu:/# lsinitramfs /boot/initrd.img-7.0.0-14-generic | grep -E 'cryptroot|cryptsetup|crypttab' | head -20
+cryptroot
+cryptroot/crypttab
+etc/crypttab
+scripts/local-block/cryptroot
+scripts/local-bottom/cryptroot
+scripts/local-top/cryptroot
+usr/bin/cryptroot-unlock
+usr/lib/cryptsetup
+usr/lib/cryptsetup/askpass
+usr/lib/cryptsetup/functions
+usr/lib/x86_64-linux-gnu/libcryptsetup.so.12
+usr/lib/x86_64-linux-gnu/libcryptsetup.so.12.11.0
+usr/sbin/cryptsetup
+root@kubuntu:/# exit
+sudo umount -R /mnt
+findmnt /mnt
+exit
+kubuntu@kubuntu:~$ findmnt /mnt
+TARGET SOURCE                FSTYPE OPTIONS
+/mnt   /dev/mapper/cryptroot ext4   rw,relatime
+kubuntu@kubuntu:~$ sudo umount -R /mnt
+kubuntu@kubuntu:~$ findmnt /mnt
+kubuntu@kubuntu:~$ sudo reboot
