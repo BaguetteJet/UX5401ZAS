@@ -202,9 +202,11 @@ Attempt 1 - */dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4
 
 Attempt 2 - */dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **encrypted** `/`. FAILED. I tried rebooting and noticed the ubuntu boot option was available. It would bring me to a `GRUB>` termianl instead of the GRUB menu. I couldn't find any information on this installation failure online, so I attempted to fix issue with the assitance of LLMs Claude and DeepSeek. I was able to boot into live environment from the USB stick, and confirmed that GRUB was fine, and Kubuntu installed. I was able to enter the root of the Kubuntu partition. After countless hours, I came to the conclusion that GRUB couldn't access `/boot`, which was inside the encrypted patition. I was unable to rebuild brub with the needed modules to access the encrypted partition.
 
-Attempt 3 - */dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **unencrypted** `/boot` 1000 MiB, New partiton */dev/nvme0n1p7* `ext4` **encrypted** `/`. FAILED. Rebooting would bring me to a `GRUB>` termianl instead of the GRUB menu. I attempted to fix issue with the assitance of LLMs Claude and ChatGPT. Eventually ChatGPT was able to diagnose the problem and provide me with a working solution. 
+Attempt 3 - */dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **unencrypted** `/`. FAILED. Rebooting would bring me to a `GRUB>` termianl instead of the GRUB menu. I attempted to fix issue with the assitance of LLMs Claude and ChatGPT. Eventually ChatGPT was able to diagnose the problem and provide me with a working solution. I had a working bootable OS but the root partition was not encrypted.
 
-Attempt 4 - 
+Attempt 4 - */dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **unencrypted** `/boot` 1000 MiB, New partiton */dev/nvme0n1p7* `ext4` **encrypted** `/`. FAILED. I gave chatGPT the terminal logs from the previous attempt and explained the change is setup, with the root partition now encrypted and the boot being separate. Successfully had working bootable encrypted OS
+
+Here are the steps 
 
 ## Versions
 
