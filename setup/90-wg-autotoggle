@@ -7,19 +7,14 @@ ACTION="$2"
 WG_VPN="wg0" # same as wireguard .conf
 TRUSTED=("samplenetwork1" "samplenetwork2" "samplenetwork3")
 
-# Ignore events from the wg interface itself
 [[ "$IFACE" == "$WG_VPN" ]] && exit 0
 
 case "$ACTION" in
-  up|down)
+  up)
+    sleep 0.2
+    
     CURRENT_SSID=$(nmcli -t -f active,ssid dev wifi | awk -F: '$1=="yes"{print $2}')
     WG_UP=$(wg show "$WG_VPN" 2>/dev/null)
-
-    if [[ -z "$CURRENT_SSID" ]]; then
-        # Wired, no SSID - treat as trusted
-        [[ -n "$WG_UP" ]] && wg-quick down "$WG_VPN"
-        exit 0
-    fi
 
     trusted=false
     for s in "${TRUSTED[@]}"; do
