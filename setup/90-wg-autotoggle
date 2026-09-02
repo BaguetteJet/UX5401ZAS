@@ -1,0 +1,35 @@
+#!/bin/bash
+# /etc/NetworkManager/dispatcher.d/90-wg-autotoggle
+
+IFACE="$1"
+ACTION="$2"
+
+WG_VPN="wg0" # same as wireguard .conf
+TRUSTED=("samplenetwork1" "samplenetwork2" "samplenetwork3")
+
+# Ignore events from the wg interface itself
+[[ "$IFACE" == "$WG_VPN" ]] && exit 0
+
+case "$ACTION" in
+  up|down)
+    CURRENT_SSID=$(nmcli -t -f active,ssid dev wifi | awk -F: '$1=="yes"{print $2}')
+    WG_UP=$(wg show "$WG_VPN" 2>/dev/null)
+
+    if [[ -z "$CURRENT_SSID" ]]; then
+        # Wired, no SSID - treat as trusted
+        [[ -n "$WG_UP" ]] && wg-quick down "$WG_VPN"
+        exit 0
+    fi
+
+    trusted=false
+    for s in "${TRUSTED[@]}"; do
+        [[ "$CURRENT_SSID" == "$s" ]] && trusted=true
+    done
+
+    if $trusted; then
+        [[ -n "$WG_UP" ]] && wg-quick down "$WG_VPN"
+    else
+        [[ -z "$WG_UP" ]] && wg-quick up "$WG_VPN"
+    fi
+    ;;
+esac

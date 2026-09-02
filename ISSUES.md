@@ -3,17 +3,15 @@ Here is a list of issues I encountered with Kubuntu.
 
 Also see bugs I encountered here: [Bugs](#bugs)
 
-| # | Issue | Status |
-| --- | --- | --- |
-| 1 | [Live Environment Legacy instead of UEFI](#issue-1---live-environment-legacy-instead-of-uefi) | Resolved |
-| 2 | [Bootloader could not be installed](#issue-2---bootloader-could-not-be-installed) | Resolved |
-| 3 | [Try Kubuntu or Install Kubuntu screen](#issue-3---try-kubuntu-or-install-kubuntu-screen) | Resolved |
-| 4 | [Camera privacy shutter not working](#issue-4---camera-privacy-shutter-not-working) | Pending |
-| 5 | [Fingerprint scanner not working](#issue-5---fingerprint-scanner-not-working) | Pending |
-| 6 | [Laptop stylus battery status](#issue-6---laptop-stylus-battery-status) | Pending |
-| 7 | [External display scaling incorrect](#issue-7---external-display-scaling-incorrect) | Pending |
-| 8 | [Sound broke working after external display](#issue-8---sound-broke-working-after-connecting-external-display) | Resolved |
-| 9 | [CD-ROM repo entry listed in APT sources](#issue-9---cd-rom-repo-entry-listed-in-apt-sources) | Resolved |
+1. [Live Environment Legacy instead of UEFI](#issue-1---live-environment-legacy-instead-of-uefi) - Resolved
+2. [Bootloader could not be installed](#issue-2---bootloader-could-not-be-installed) - Resolved
+3. [Try Kubuntu or Install Kubuntu screen](#issue-3---try-kubuntu-or-install-kubuntu-screen) - Resolved
+4. [Camera privacy shutter not working](#issue-4---camera-privacy-shutter-not-working) - **Pending**
+5. [Fingerprint scanner not working](#issue-5---fingerprint-scanner-not-working) - **Pending**
+6. [Laptop stylus battery status](#issue-6---laptop-stylus-battery-status) - **Pending**
+7. [External display scaling incorrect](#issue-7---external-display-scaling-incorrect) - **Pending**
+8. [Sound broke working after connecting external display](#issue-8---sound-broke-working-after-connecting-external-display) - Resolved
+9. [CD-ROM repo entry listed in APT sources](#issue-9---cd-rom-repo-entry-listed-in-apt-sources) - Resolved
 
 ## Issue 1 - Live Environment Legacy instead of UEFI
 **RESOLVED** ~2hrs

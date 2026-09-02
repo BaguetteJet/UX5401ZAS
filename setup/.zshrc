@@ -29,9 +29,9 @@ temps() {
     local wifi=$(sensors | grep -A2 "iwlwifi" | grep "temp1" | awk '{print $2}')
     local asus=$(sensors | grep -A2 "^acpitz-acpi-0" | grep "temp1" | awk '{print $2}')
     local fan=$(sensors | grep "cpu_fan" | awk '{print $2}')
-    echo "CPU     $cpu"
-    echo "NVMe    $nvme"
-    echo "WiFi    $wifi"
-    echo "ACPI    $asus"
-    echo "Fan     $fan RPM"
+    echo "CPU:  $cpu"
+    echo "NVMe: $nvme"
+    echo "WiFi: $wifi"
+    echo "ACPI: $asus"
+    echo "Fan:  $fan RPM"
 }
