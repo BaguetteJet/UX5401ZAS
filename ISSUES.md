@@ -12,6 +12,7 @@ Also see bugs I encountered here: [Bugs](#bugs)
 7. [External display scaling incorrect](#issue-7---external-display-scaling-incorrect) - **Pending**
 8. [Sound broke working after connecting external display](#issue-8---sound-broke-working-after-connecting-external-display) - Resolved
 9. [CD-ROM repo entry listed in APT sources](#issue-9---cd-rom-repo-entry-listed-in-apt-sources) - Resolved
+10. [ASUS Numberpad 2.0 not working](#issue-10---asus-numberpad-20-not-working) - **Pending**
 
 ## Issue 1 - Live Environment Legacy instead of UEFI
 **RESOLVED** ~2hrs
@@ -162,7 +163,6 @@ The laptop came with an Asus stylus. The stylus works fine with the display, but
 
 Dell ultra wide monitor native 3440 x 1440 (21:9) @ 144Hz. Connecting directly via HDMI results in a max available 2560 x 1440 (16:9) @ 59.98Hz. Using a HDMI -> USB C adapter results in max available 3440 x 1440 (21:9) @ 99.98Hz.
 
-
 ## Issue 8 - Sound broke working after connecting external display
 **RESOLVED** ~2hrs
 
@@ -176,7 +176,7 @@ Shutdown laptop fully (not restart) and hold power button down for 15-20s before
 ## Issue 9 - CD-ROM repo entry listed in APT sources
 **RESOLVED** ~5mins
 
-Running `sudo apt update` resulted in error because an old CD-ROM repo entry is still listed in your APT sources.
+Running `sudo apt update` resulted in error because an old CD-ROM repo entry was still listed in APT sources.
 
 ```
 igor@zenbook:~$ sudo apt update                         
@@ -190,6 +190,11 @@ Error: The repository 'file:/cdrom resolute Release' no longer has a Release fil
 ```
 sudo rm /etc/apt/sources.list.d/cdrom.sources
 ```
+
+## Issue 10 - ASUS Numberpad 2.0 not working
+**PENDING**
+
+The numberpad that lights up under the touchpad (ASUS Numberpad 2.0) doesn't work.
 
 # Bugs
 

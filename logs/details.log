@@ -1,0 +1,64 @@
+igor@zenbook:~$ lsusb   
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 003: ID 0b05:8835 ASUSTek Computer, Inc. M480 BULK
+Bus 003 Device 004: ID 04f3:0c6e Elan Microelectronics Corp. ELAN:Fingerprint
+Bus 003 Device 005: ID 13d3:5460 IMC Networks USB2.0 HD UVC WebCam
+Bus 003 Device 006: ID 8087:0033 Intel Corp. AX211 Bluetooth
+Bus 003 Device 008: ID 2109:0100 VIA Labs, Inc. USB-C multiport device
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+
+igor@zenbook:~$ sensors                                                    
+iwlwifi_1-virtual-0
+Adapter: Virtual device
+temp1:        +34.0°C  
+
+nvme-pci-e100
+Adapter: PCI adapter
+Composite:    +41.9°C  (low  = -273.1°C, high = +80.8°C)
+                       (crit = +84.8°C)
+Sensor 1:     +41.9°C  (low  = -273.1°C, high = +65261.8°C)
+Sensor 2:     +39.9°C  (low  = -273.1°C, high = +65261.8°C)
+
+BAT0-acpi-0
+Adapter: ACPI interface
+in0:          12.85 V  
+power1:       10.23 W  
+
+coretemp-isa-0000
+Adapter: ISA adapter
+Package id 0:  +46.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 0:        +46.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 4:        +45.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 8:        +44.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 12:       +43.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 16:       +42.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 20:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 24:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 25:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 26:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 27:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 28:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 29:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 30:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+Core 31:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+
+asus-isa-000a
+Adapter: ISA adapter
+cpu_fan:     2800 RPM
+pwm1:             N/A
+
+ucsi_source_psy_USBC000:002-isa-0000
+Adapter: ISA adapter
+in0:           0.00 V  (min =  +0.00 V, max =  +0.00 V)
+curr1:         2.00 A  (max =  +0.00 A)
+
+ucsi_source_psy_USBC000:001-isa-0000
+Adapter: ISA adapter
+in0:           0.00 V  (min =  +0.00 V, max =  +0.00 V)
+curr1:         5.00 A  (max =  +0.00 A)
+
+acpitz-acpi-0
+Adapter: ACPI interface
+temp1:        +47.0°C  
