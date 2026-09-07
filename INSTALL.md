@@ -149,6 +149,8 @@ The installaion should progress until fully until the very end, where I got an e
 > ```The bootloader could not be installed. The installation command <pre>grub-install --target=x86_64-efi --efi-directory=boot/efi --bootloader-id=ubuntu --force</pre> returned error code 1.```   
 > X Close
 
+ I resolved this issue here: [Issue 2](/ISSUES.md)
+
 Complete installtion and unplug USB.
 
 ### STEP 7 - Clean up

@@ -1,7 +1,6 @@
 # Issues
-Here is a list of issues I encountered with Kubuntu.
 
-Also see bugs I encountered here: [Bugs](#bugs)
+List of issues: (see [bugs](#bugs) at bottom of document)
 
 1. [Live Environment Legacy instead of UEFI](#issue-1---live-environment-legacy-instead-of-uefi) - Resolved
 2. [Bootloader could not be installed](#issue-2---bootloader-could-not-be-installed) - Resolved
@@ -173,10 +172,10 @@ I believe the embedded controller (EC), the low-level chip that manages hardware
 **FIX**   
 Shutdown laptop fully (not restart) and hold power button down for 15-20s before powering on.
 
-## Issue 9 - CD-ROM repo entry listed in APT sources
+## Issue 9 - CD-ROM repo entry listed in APT sourcess
 **RESOLVED** ~5mins
 
-Running `sudo apt update` resulted in error because an old CD-ROM repo entry was still listed in APT sources.
+Running `sudo apt update` resulted in error because an old CD-ROM repo entry was still listed in APT sources. [logs](/logs/issue9-fix.log)
 
 ```
 igor@zenbook:~$ sudo apt update                         
