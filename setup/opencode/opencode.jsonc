@@ -1,0 +1,43 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // Primary model for system tasks and code generation
+  "model": "deepseek/deepseek-v4-flash",
+
+  // Global and workspace system administration rules
+  "instructions": [
+    "~/.config/opencode/rules/general.md",
+    "~/.config/opencode/rules/kubuntu-sysadmin.md",
+    ".opencode/rules/*.md"
+  ],
+
+  "permission": {
+    "shell": {
+      // Require manual approval for elevated privileges and package management
+      "sudo *": "ask",
+      "git *": "ask",
+      "apt *": "ask",
+      "apt-get *": "ask",
+      "snap *": "ask",
+      "flatpak *": "ask",
+
+      // Auto-allow passive, non-destructive diagnostic reads
+      "systemctl status *": "allow",
+      "journalctl *": "allow",
+      "dmesg *": "allow",
+      "lspci *": "allow",
+      "lsusb *": "allow",
+
+      // Completely block high-risk or catastrophic disk operations
+      "rm -rf *": "deny",
+      "dd *": "deny",
+      "mkfs* *": "deny",
+      "fdisk *": "deny"
+    }
+  },
+
+  "update": "notify",
+
+  // Enable snapshots to automatically snapshot state before editing configs
+  "snapshots": true
+}

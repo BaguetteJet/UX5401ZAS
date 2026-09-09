@@ -1,0 +1,48 @@
+#!/usr/bin/zsh
+
+print_temps() {
+    local cpu=$(sensors | grep "Package id 0" | awk '{print $4}')
+    local nvme=$(sensors | grep "Composite" | awk '{print $2}')
+    local wifi=$(sensors | grep -A2 "iwlwifi" | grep "temp1" | awk '{print $2}')
+    local asus=$(sensors | grep -A2 "^acpitz-acpi-0" | grep "temp1" | awk '{print $2}')
+    local fan=$(sensors | grep "cpu_fan" | awk '{print $2}')
+    printf "\033[KCPU:  %s\n" "$cpu"
+    printf "\033[KNVMe: %s\n" "$nvme"
+    printf "\033[KWiFi: %s\n" "$wifi"
+    printf "\033[KACPI: %s\n" "$asus"
+    printf "\033[KFan:  %s RPM\n" "$fan"
+}
+
+if [[ "$1" == "-w" ]]; then
+    # Save terminal state
+    local old_stty=$(stty -g 2>/dev/null)
+    # Hide cursor and disable input echo during watch mode
+    tput civis 2>/dev/null
+    stty -echo 2>/dev/null
+
+    # Define cleanup routine to restore terminal settings
+    cleanup() {
+        tput cnorm 2>/dev/null
+        [[ -n "$old_stty" ]] && stty "$old_stty" 2>/dev/null
+        trap - INT TERM HUP EXIT
+    }
+
+    # Restore cursor and terminal echo on interrupt or termination
+    trap 'cleanup; exit 0' INT TERM
+    # Exit shell gracefully when terminal window is closed
+    trap 'cleanup; exit 0' HUP
+    # Ensure cleanup runs if the script exits normally
+    trap 'cleanup' EXIT
+
+    print_temps
+    while true; do
+        sleep 1 || break
+        # Stop loop if terminal descriptor is no longer valid
+        [[ -t 1 ]] || break
+        # Move cursor up 5 lines to overwrite output without clearing screen
+        printf "\033[5A" || break
+        print_temps || break
+    done
+else
+    print_temps
+fi
