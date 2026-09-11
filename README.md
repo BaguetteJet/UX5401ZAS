@@ -32,7 +32,7 @@ Inputs:
 - 🟢 Stylus
 - 🟢 Microphone
 - 🟢 Camera
-- 🟠 Fingerprint reader
+- 🔵 Fingerprint sensor
 
 Features:
 
@@ -47,7 +47,7 @@ Ports:
 - 🟢 HDMI port
 - 🟢 USB-A port
 - 🟢 USB-C ports charging
-- ⚫ USB-C ports power output
+- 🟢 USB-C ports power output
 - 🟢 USB-C ports display output
 - ⚫ 3.5 mm headphone/microphone jack
 - ⚫ MicroSD card reader
@@ -60,7 +60,7 @@ Wireless:
 Outputs:
 
 - 🟢 OLED Main Display 3840 × 2400 16:10 @ 60 Hz
-- 🟡 OLED ZenVision external lid display (default animation, incorrect time)
+- 🟡 OLED ZenVision external lid display (shows default animation, incorrect time) -> 🔵 [PROJECT](https://github.com/BaguetteJet/zenvision-studio)
 - 🟡 External monitors (available resolutions incorrect HDMI, USB-C)
 - 🟢 Hardware acceleration
 - 🟢 Stereo speakers

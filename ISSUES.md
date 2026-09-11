@@ -6,7 +6,7 @@ List of issues: (see [bugs](#bugs) at bottom of document)
 2. [Bootloader could not be installed](#issue-2---bootloader-could-not-be-installed) - Resolved
 3. [Try Kubuntu or Install Kubuntu screen](#issue-3---try-kubuntu-or-install-kubuntu-screen) - Resolved
 4. [Camera privacy shutter not working](#issue-4---camera-privacy-shutter-not-working) - **Pending**
-5. [Fingerprint scanner not working](#issue-5---fingerprint-scanner-not-working) - **Pending**
+5. [Fingerprint scanner not working](#issue-5---fingerprint-scanner-not-working) - Resolved
 6. [Laptop stylus battery status](#issue-6---laptop-stylus-battery-status) - **Pending**
 7. [External display scaling incorrect](#issue-7---external-display-scaling-incorrect) - **Pending**
 8. [Sound broke working after connecting external display](#issue-8---sound-broke-working-after-connecting-external-display) - Resolved
@@ -55,10 +55,10 @@ Attempt 2 - INSTALLATION FAILED
 */dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **encrypted** `/`. I was able to boot into live environment from the USB stick, and confirm that both GRUB and Kubuntu installed successfully. I discovered GRUB was unable to access `/boot` inside the encrypted partition. I was unable to rebuild GRUB with the modules required as Ubuntu used a signed version of GRUB and a signed shim to work with Secure Boot.
 
 Attempt 3 - INSTALLATION FAILED + FIX   
-*/dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **unencrypted** `/`. Now that `/boot` was not encrypted, I was able to repair the GRUB boot configuration/installation. I had a working, bootable OS but I was not satisfied as the root was not encrypted. [logs](/logs/install-issue2-attempt3-unencrypted.log)
+*/dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **unencrypted** `/`. Now that `/boot` was not encrypted, I was able to repair the GRUB boot configuration/installation. I had a working, bootable OS but I was not satisfied as the root was not encrypted. [logs](/logs/issue2-install-attempt3-unencrypted.log)
 
 Attempt 4 - INSTALLATION FAILED + FIX   
-*/dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **unencrypted** `/boot` 1000 MiB, New partiton */dev/nvme0n1p7* `ext4` **encrypted** `/`. Learning from the previous attempt, creating a separate unencrypted boot partition, I was able to successfully repair the GRUB boot configuration/installation and had working, bootable, encrypted OS. [logs](/logs/install-issue2-attempt4-encrypted.log)
+*/dev/nvme0n1p1* -> `/boot/etc`, New partiton */dev/nvme0n1p6* `ext4` **unencrypted** `/boot` 1000 MiB, New partiton */dev/nvme0n1p7* `ext4` **encrypted** `/`. Learning from the previous attempt, creating a separate unencrypted boot partition, I was able to successfully repair the GRUB boot configuration/installation and had working, bootable, encrypted OS. [logs](/logs/issue2-install-attempt4-encrypted.log)
 
 Two main issues:
 
@@ -148,9 +148,60 @@ From login screen, change environment to `wayland` in the bottom left.
 `Fn` + `F10` does not operate the camera shutter.
 
 ## Issue 5 - Fingerprint scanner not working
-**PENDING**
+**RESOLVED** ~1hr
 
-Fingerprint scanner not detected.
+Fingerprint scanner kept failing to register my fingerprint. The fingerprint scanner (ELAN 04f3:0c6e) is a swipe-style sensor. The sensor needs to capture at least 7 image frames during a single swipe, and fast or short finger swipes were only registering 5-6 frames before timing out. [logs](/logs/issue5-elan-fingerprint-sensor.log), also see [relevant issue post](https://github.com/iafilatov/libfprint/issues/47).
+
+```bash
+fprintd-enroll
+```
+Resulted in the `enroll-disconnected` error after multiple attempts
+```
+igor@zenbook:~$ fprintd-enroll
+Using device /net/reactivated/Fprint/Device/0
+Enrolling right-index-finger finger.
+Enroll result: enroll-stage-passed
+Enroll result: enroll-stage-passed
+Enroll result: enroll-stage-passed
+Enroll result: enroll-disconnected
+```
+
+**FIX**  
+Swipe slowly, using the full length of the sensor, from top to bottom, with gentle pressure the whole way.
+
+### Issue 5.1 - Fingerprint option not working
+Check `fprintd-verify` for error:
+```bash
+igor@zenbook:~$ fprintd-verify                                                           
+Using device /net/reactivated/Fprint/Device/0 
+failed to claim device: GDBus.Error:net.reactivated.Fprint.Error.Internal: Open failed with error: The device has already been opened!
+```
+To resolve, restart the service
+```bash
+sudo systemctl restart fprintd.service
+```
+
+### Issue 5.2 - Fingerprint option not showing on lockscreen
+If the fingerprint option is not showing on lock screen after updating `sudo pam-auth-update`, try forcing the sensor to stay on.
+
+Check status
+```bash
+cat /sys/bus/usb/devices/3-8/power/control
+```
+This should return `auto`
+
+Force sensor to stay on
+```bash
+sudo udevadm trigger --action=add /sys/bus/usb/devices/3-8
+sudo systemctl restart fprintd.service
+```
+
+Check status
+```bash
+cat /sys/bus/usb/devices/3-8/power/control
+```
+This should return `on`
+
 
 ## Issue 6 - Laptop stylus battery status
 **PENDING**
