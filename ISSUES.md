@@ -169,6 +169,8 @@ Enroll result: enroll-disconnected
 **FIX**  
 Swipe slowly, using the full length of the sensor, from top to bottom, with gentle pressure the whole way.
 
+![fingerprint-swipe-gif](/assets/fingerprint-swipe.gif)
+
 ### Issue 5.1 - Fingerprint option not working
 Check `fprintd-verify` for error:
 ```bash
