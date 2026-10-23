@@ -60,7 +60,7 @@ Wireless:
 Outputs:
 
 - 🟢 OLED Main Display 3840 × 2400 16:10 @ 60 Hz
-- 🟡 OLED ZenVision external lid display (shows default animation, incorrect time) -> 🔵 [PROJECT](https://github.com/BaguetteJet/zenvision-studio)
+- 🔵 OLED ZenVision external lid display -> 🔵 [MY PROJECT](https://github.com/BaguetteJet/zenvision-studio)
 - 🟡 External monitors (available resolutions incorrect HDMI, USB-C)
 - 🟢 Hardware acceleration
 - 🟢 Stereo speakers
@@ -98,7 +98,7 @@ Behaviour:
 Unavailable Features: TBC
 
 - No camera shutter
-- No fingerprint reader
+- No touchpad numberpad
 - No backpanel OLED control
 
 ## About this System

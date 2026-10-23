@@ -1,43 +1,175 @@
 {
   "$schema": "https://opencode.ai/config.json",
 
-  // Primary model for system tasks and code generation
-  "model": "deepseek/deepseek-v4-flash",
+  "model": "deepseek/deepseek-v4.1-flash",
 
-  // Global and workspace system administration rules
-  "instructions": [
-    "~/.config/opencode/rules/general.md",
-    "~/.config/opencode/rules/kubuntu-sysadmin.md",
-    ".opencode/rules/*.md"
-  ],
-
-  "permission": {
-    "shell": {
-      // Require manual approval for elevated privileges and package management
-      "sudo *": "ask",
-      "git *": "ask",
-      "apt *": "ask",
-      "apt-get *": "ask",
-      "snap *": "ask",
-      "flatpak *": "ask",
-
-      // Auto-allow passive, non-destructive diagnostic reads
-      "systemctl status *": "allow",
-      "journalctl *": "allow",
-      "dmesg *": "allow",
-      "lspci *": "allow",
-      "lsusb *": "allow",
-
-      // Completely block high-risk or catastrophic disk operations
-      "rm -rf *": "deny",
-      "dd *": "deny",
-      "mkfs* *": "deny",
-      "fdisk *": "deny"
-    }
-  },
-
+  // Global config only; project-level values are ignored
   "update": "notify",
+  // Useful for recovering file changes, not a replacement for backups
+  "snapshots": true,
 
-  // Enable snapshots to automatically snapshot state before editing configs
-  "snapshots": true
+  // Ordered rules, last match wins: catch-all first, denies last.
+  // Global rules are appended after project rules, so a repo cannot loosen them.
+  "permissions": [
+    // Everything not listed below asks first (the built-in base policy allows most things)
+    { "action": "*", "resource": "*", "effect": "ask" },
+
+    // ---- Read: allow, then deny sensitive locations ----
+    // Patterns start with "*" so they match relative (in-project) and absolute paths
+    { "action": "read", "resource": "*", "effect": "allow" },
+    { "action": "glob", "resource": "*", "effect": "allow" },
+    { "action": "grep", "resource": "*", "effect": "allow" },
+
+    { "action": "read", "resource": "*.env", "effect": "deny" },
+    { "action": "read", "resource": "*.env.*", "effect": "deny" },
+    { "action": "read", "resource": "*.env.example", "effect": "allow" },
+    { "action": "read", "resource": "*.pem", "effect": "deny" },
+    { "action": "read", "resource": "*.key", "effect": "deny" },
+    { "action": "read", "resource": "*.kdbx", "effect": "deny" },
+    { "action": "read", "resource": "*id_rsa*", "effect": "deny" },
+    { "action": "read", "resource": "*id_ed25519*", "effect": "deny" },
+    { "action": "read", "resource": "*.ssh/*", "effect": "deny" },
+    { "action": "read", "resource": "*.gnupg/*", "effect": "deny" },
+    { "action": "read", "resource": "*.aws/*", "effect": "deny" },
+    { "action": "read", "resource": "*.kube/*", "effect": "deny" },
+    { "action": "read", "resource": "*.docker/*", "effect": "deny" },
+    { "action": "read", "resource": "*.config/gcloud/*", "effect": "deny" },
+    { "action": "read", "resource": "*.config/gh/*", "effect": "deny" },
+    { "action": "read", "resource": "*.netrc", "effect": "deny" },
+    { "action": "read", "resource": "*.git-credentials", "effect": "deny" },
+    { "action": "read", "resource": "*.npmrc", "effect": "deny" },
+    { "action": "read", "resource": "*.pypirc", "effect": "deny" },
+    { "action": "read", "resource": "*.local/share/opencode/*", "effect": "deny" },
+    { "action": "read", "resource": "*.local/share/kwalletd/*", "effect": "deny" },
+    { "action": "read", "resource": "*.local/share/keyrings/*", "effect": "deny" },
+    { "action": "read", "resource": "*.mozilla/*", "effect": "deny" },
+    { "action": "read", "resource": "*snap/firefox/*", "effect": "deny" },
+    { "action": "read", "resource": "*.config/google-chrome/*", "effect": "deny" },
+    { "action": "read", "resource": "*.config/chromium/*", "effect": "deny" },
+    { "action": "read", "resource": "*.config/BraveSoftware/*", "effect": "deny" },
+    { "action": "read", "resource": "*.bash_history", "effect": "deny" },
+    { "action": "read", "resource": "*.zsh_history", "effect": "deny" },
+    { "action": "read", "resource": "/etc/shadow*", "effect": "deny" },
+    { "action": "read", "resource": "/etc/gshadow*", "effect": "deny" },
+    { "action": "read", "resource": "/etc/sudoers*", "effect": "deny" },
+    { "action": "read", "resource": "/etc/ssl/private/*", "effect": "deny" },
+    { "action": "read", "resource": "*ssh_host_*", "effect": "deny" },
+    { "action": "read", "resource": "/etc/NetworkManager/system-connections/*", "effect": "deny" },
+    { "action": "read", "resource": "/root/*", "effect": "deny" },
+
+    // ---- Writing and network ----
+    { "action": "edit", "resource": "*", "effect": "ask" },
+    { "action": "edit", "resource": "/tmp/*", "effect": "allow" },
+    { "action": "webfetch", "resource": "*", "effect": "ask" },
+    { "action": "websearch", "resource": "*", "effect": "ask" },
+
+    // ---- Outside the launch directory: ask, except sensitive locations ----
+    { "action": "external_directory", "resource": "*", "effect": "ask" },
+    // /tmp is shared and world-readable: allow it, but deny agent sockets and keyrings
+    { "action": "external_directory", "resource": "/tmp/*", "effect": "allow" },
+    { "action": "external_directory", "resource": "/tmp/ssh-*", "effect": "deny" },
+    { "action": "external_directory", "resource": "/tmp/keyring-*", "effect": "deny" },
+    { "action": "external_directory", "resource": "/tmp/gpg-*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.ssh/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.gnupg/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.aws/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.kube/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.docker/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.config/gcloud/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.config/gh/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.local/share/opencode/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.local/share/kwalletd/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.local/share/keyrings/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.mozilla/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*snap/firefox/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.config/google-chrome/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.config/chromium/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "*.config/BraveSoftware/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "/etc/ssl/private/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "/etc/NetworkManager/system-connections/*", "effect": "deny" },
+    { "action": "external_directory", "resource": "/root/*", "effect": "deny" },
+
+    // ---- Shell ----
+    // A pattern ending in " *" also matches the bare command, so "ls *" covers "ls"
+    { "action": "shell", "resource": "*", "effect": "ask" },
+
+    // Read-only system information
+    { "action": "shell", "resource": "pwd", "effect": "allow" },
+    { "action": "shell", "resource": "whoami", "effect": "allow" },
+    { "action": "shell", "resource": "id", "effect": "allow" },
+    { "action": "shell", "resource": "hostname", "effect": "allow" },
+    { "action": "shell", "resource": "uname *", "effect": "allow" },
+    { "action": "shell", "resource": "ls *", "effect": "allow" },
+    { "action": "shell", "resource": "stat *", "effect": "allow" },
+    { "action": "shell", "resource": "file *", "effect": "allow" },
+    { "action": "shell", "resource": "df *", "effect": "allow" },
+    { "action": "shell", "resource": "du *", "effect": "allow" },
+    { "action": "shell", "resource": "free *", "effect": "allow" },
+    { "action": "shell", "resource": "ps *", "effect": "allow" },
+    { "action": "shell", "resource": "lspci *", "effect": "allow" },
+    { "action": "shell", "resource": "lsusb *", "effect": "allow" },
+
+    // Diagnostics
+    { "action": "shell", "resource": "systemctl status *", "effect": "allow" },
+    { "action": "shell", "resource": "systemctl is-active *", "effect": "allow" },
+    { "action": "shell", "resource": "systemctl is-enabled *", "effect": "allow" },
+    { "action": "shell", "resource": "journalctl *", "effect": "allow" },
+    { "action": "shell", "resource": "dmesg *", "effect": "allow" },
+
+    // Git inspection
+    { "action": "shell", "resource": "git status *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff *", "effect": "allow" },
+    { "action": "shell", "resource": "git log *", "effect": "allow" },
+    { "action": "shell", "resource": "git show *", "effect": "allow" },
+    { "action": "shell", "resource": "git branch --show-current", "effect": "allow" },
+
+    // Destructive operations. The leading "*" also catches "sudo ..." forms.
+    { "action": "shell", "resource": "*rm -r*", "effect": "deny" },
+    { "action": "shell", "resource": "*rm -R*", "effect": "deny" },
+    { "action": "shell", "resource": "*rm -fr*", "effect": "deny" },
+    { "action": "shell", "resource": "*rm --recursive*", "effect": "deny" },
+    { "action": "shell", "resource": "dd *", "effect": "deny" },
+    { "action": "shell", "resource": "sudo dd *", "effect": "deny" },
+    { "action": "shell", "resource": "*mkfs*", "effect": "deny" },
+    { "action": "shell", "resource": "*fdisk *", "effect": "deny" },
+    { "action": "shell", "resource": "*gdisk *", "effect": "deny" },
+    { "action": "shell", "resource": "*parted *", "effect": "deny" },
+    { "action": "shell", "resource": "*wipefs*", "effect": "deny" },
+    { "action": "shell", "resource": "*shred *", "effect": "deny" },
+    { "action": "shell", "resource": "*blkdiscard*", "effect": "deny" },
+    { "action": "shell", "resource": "*cryptsetup*", "effect": "deny" },
+    { "action": "shell", "resource": "*> /dev/sd*", "effect": "deny" },
+    { "action": "shell", "resource": "*> /dev/nvme*", "effect": "deny" },
+
+    // Sensitive locations (mirrors the read rules; also stops e.g. git diff --no-index)
+    { "action": "shell", "resource": "*.ssh*", "effect": "deny" },
+    { "action": "shell", "resource": "*.gnupg*", "effect": "deny" },
+    { "action": "shell", "resource": "*.aws*", "effect": "deny" },
+    { "action": "shell", "resource": "*.kube*", "effect": "deny" },
+    { "action": "shell", "resource": "*.netrc*", "effect": "deny" },
+    { "action": "shell", "resource": "*.git-credentials*", "effect": "deny" },
+    { "action": "shell", "resource": "*.local/share/opencode*", "effect": "deny" },
+    { "action": "shell", "resource": "*auth.json*", "effect": "deny" },
+    { "action": "shell", "resource": "*kwalletd*", "effect": "deny" },
+    { "action": "shell", "resource": "*.local/share/keyrings*", "effect": "deny" },
+    { "action": "shell", "resource": "*.mozilla*", "effect": "deny" },
+    { "action": "shell", "resource": "*snap/firefox*", "effect": "deny" },
+    { "action": "shell", "resource": "*google-chrome*", "effect": "deny" },
+    { "action": "shell", "resource": "*.config/chromium*", "effect": "deny" },
+    { "action": "shell", "resource": "*BraveSoftware*", "effect": "deny" },
+    { "action": "shell", "resource": "*_history*", "effect": "deny" },
+    { "action": "shell", "resource": "*/etc/shadow*", "effect": "deny" },
+    { "action": "shell", "resource": "*/etc/gshadow*", "effect": "deny" },
+    { "action": "shell", "resource": "*/etc/sudoers*", "effect": "deny" },
+    { "action": "shell", "resource": "*/etc/ssl/private*", "effect": "deny" },
+    { "action": "shell", "resource": "*system-connections*", "effect": "deny" },
+    { "action": "shell", "resource": "*/root/*", "effect": "deny" },
+    { "action": "shell", "resource": "*.env", "effect": "deny" },
+    { "action": "shell", "resource": "*.env *", "effect": "deny" },
+
+    // Environment dumps can expose API keys held in env vars
+    { "action": "shell", "resource": "env", "effect": "deny" },
+    { "action": "shell", "resource": "printenv*", "effect": "deny" },
+    { "action": "shell", "resource": "*/proc/*/environ*", "effect": "deny" }
+  ]
 }

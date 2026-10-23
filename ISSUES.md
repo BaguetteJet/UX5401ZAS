@@ -6,12 +6,13 @@ List of issues: (see [bugs](#bugs) at bottom of document)
 2. [Bootloader could not be installed](#issue-2---bootloader-could-not-be-installed) - Resolved
 3. [Try Kubuntu or Install Kubuntu screen](#issue-3---try-kubuntu-or-install-kubuntu-screen) - Resolved
 4. [Camera privacy shutter not working](#issue-4---camera-privacy-shutter-not-working) - **Pending**
-5. [Fingerprint scanner not working](#issue-5---fingerprint-scanner-not-working) - Resolved
+5. [Fingerprint scanner not working](#issue-5---fingerprint-scanner-not-working) - Resolved*
 6. [Laptop stylus battery status](#issue-6---laptop-stylus-battery-status) - **Pending**
 7. [External display scaling incorrect](#issue-7---external-display-scaling-incorrect) - **Pending**
 8. [Sound broke working after connecting external display](#issue-8---sound-broke-working-after-connecting-external-display) - Resolved
 9. [CD-ROM repo entry listed in APT sources](#issue-9---cd-rom-repo-entry-listed-in-apt-sources) - Resolved
 10. [ASUS Numberpad 2.0 not working](#issue-10---asus-numberpad-20-not-working) - **Pending**
+11. [CPU Power Limited](#issue-11---cpu-power-limited) - Resolved
 
 ## Issue 1 - Live Environment Legacy instead of UEFI
 **RESOLVED** ~2hrs
@@ -167,9 +168,11 @@ Enroll result: enroll-disconnected
 ```
 
 **FIX**  
-Swipe slowly, using the full length of the sensor, from top to bottom, with gentle pressure the whole way.
+Swipe slowly, using the full length of the sensor, from top to bottom, with gentle pressure the whole way. I have not found a way to replicate its Windows behaviour. 
 
-### Issue 5.1 - Fingerprint option not working
+### Issue 5.1 - Fingerprint unlock option not available
+Confirmed, known bug in fprintd itself. If a caller like fprintd-verify or fprintd-enroll gets interrupted instead of exiting cleanly, fprintd never releases its claim on the device, and the next attempt to claim it fails with "already claimed.
+
 Check `fprintd-verify` for error:
 ```bash
 igor@zenbook:~$ fprintd-verify                                                           
@@ -246,8 +249,45 @@ sudo rm /etc/apt/sources.list.d/cdrom.sources
 
 The numberpad that lights up under the touchpad (ASUS Numberpad 2.0) doesn't work.
 
+## Issue 11 - CPU power limited
+**RESOLVED** ~15mins
+
+The maximum CPU power was limited. CPU was stuck at about 1 GHz under full load, even though it was cool (~57°C) and was on AC power.
+
+**FIX**
+
+The firmware set a 15 W sustained / 25 W burst power limit through the MMIO RAPL interface.
+
+Show current limit
+
+```
+grep . /sys/class/powercap/intel-rapl-mmio:0/constraint_[01]_power_limit_uw
+```
+
+Up the limit to 45 W / 60 W
+
+```
+sudo sh -c 'echo 45000000 > /sys/class/powercap/intel-rapl-mmio:0/constraint_0_power_limit_uw'
+sudo sh -c 'echo 60000000 > /sys/class/powercap/intel-rapl-mmio:0/constraint_1_power_limit_uw'
+```
+
+As exected CPU runs at higher capacity during demanding tasks and fans ramp up to keep it cool as expected. Limit resets back to the default on laptop restart.
+
+Quick script to view state and change between high and low power: [cpu-power](setup/zsh/.local/bin/cpu-power)
+
+You can also change it back to 15 W / 25 W yourself
+
+```
+sudo sh -c 'echo 15000000 > /sys/class/powercap/intel-rapl-mmio:0/constraint_0_power_limit_uw'
+sudo sh -c 'echo 25000000 > /sys/class/powercap/intel-rapl-mmio:0/constraint_1_power_limit_uw'
+```
+
 # Bugs
 
 ## Bug 1 - Freeze and max fan speed
 
 The laptop froze and set fan speed to max after disconnecting external monitor. Eventually unfroze but fans remained at max speed. Restart did not resolve. Needed full shutdown.
+
+## Bug 2 - Randomly touchpad stops working 
+
+Rarely the touchpad stops working when using Bluetooth mouse. Fixes with a restart or by itself randomly. This is separate from the `Fn`+`F6` touchpad disable, which works correctly.

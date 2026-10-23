@@ -23,8 +23,10 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 bindkey '^I' forward-word
 
 # Alias go here
+alias tempsw='watch -n 1 temps'
 alias server1='ssh user@192.168.x.xxx'
 alias server2='ssh user@192.168.x.xxx'
+alias fingerprintrestart="sudo systemctl restart fprintd.service"
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.opencode/bin:$PATH"

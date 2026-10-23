@@ -1,0 +1,2 @@
+#!/bin/sh
+exec watch -n1 "grep MHz /proc/cpuinfo | sort | uniq -c | head; sensors | grep -E 'Package|Core 0'"
