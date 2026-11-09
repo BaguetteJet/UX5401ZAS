@@ -291,3 +291,7 @@ The laptop froze and set fan speed to max after disconnecting external monitor. 
 ## Bug 2 - Randomly touchpad stops working 
 
 Rarely the touchpad stops working when using Bluetooth mouse. Fixes with a restart or by itself randomly. This is separate from the `Fn`+`F6` touchpad disable, which works correctly.
+
+## Bug 3 - Konsole horizontal line
+
+The Konsole has a horizontal line across it when displaying certain text. Visible when using opencode or chafa for example. Observed with display configuration scale 215%. Switching to 214% or 216% removes the horizontal line. 
